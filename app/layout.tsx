@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
-const vazirmatn = Vazirmatn({})
+const vazirmatn = Vazirmatn({
+  weight:"500"
+})
 
 
 export const viewport: Viewport = {
