@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['images.dog.ceo'], // اضافه کردن دامنه مجاز برای تصاویر
+        domains: ['cataas.com'], // اضافه کردن دامنه مجاز برای تصاویر
     },
 }
 
