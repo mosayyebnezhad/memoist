@@ -20,24 +20,21 @@ const config: Config = {
   plugins: [nextui(
     {
       themes: {
-        light: {
-          colors: {
-            background: "white",
-            foreground: "blue",
-            primary: "red",
-            secondary: "#ccc",
-
-          }
-        },
         dark: {
           colors: {
-            background: "black",
-            foreground: "yellow",
-            primary: "orange",
-            secondary: "#ccc",
-
-          }
-        }
+            // primary: "#14FF98",
+            focus: "yellow",
+          },
+        },
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#002E1A",
+              foreground:"white"
+            },
+            focus: "yellow",
+          },
+        },
       }
     }
   )],

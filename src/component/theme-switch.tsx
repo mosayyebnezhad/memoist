@@ -71,9 +71,9 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         })}
       >
         {!isSelected || isSSR ? (
-          <SunLight width={22} />
+          <SunLight color={"white"} width={22} />
         ) : (
-          <HalfMoon width={22}/>
+          <HalfMoon color={"black"} width={22}/>
         )}
       </div>
     </Component>

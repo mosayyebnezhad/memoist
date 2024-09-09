@@ -1,6 +1,7 @@
 
 "use client"
 import { createContext, ReactNode, useState } from "react"
+import { Toaster } from "react-hot-toast"
 
 interface Iprop {
     children: ReactNode
@@ -28,6 +29,9 @@ const Context1 = (prop: Iprop) => {
         <UserContext.Provider value={Provide}>
 
             {prop.children}
+            <Toaster
+            reverseOrder={false}
+            />
         </UserContext.Provider>
 
     )
