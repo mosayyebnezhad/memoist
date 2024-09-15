@@ -1,21 +1,35 @@
 
 "use client"
+import api from "@/api/api"
+import { GetingData } from "@/types/types"
+import { useQuery } from "@tanstack/react-query"
 import { createContext, ReactNode, useState } from "react"
 import { Toaster } from "react-hot-toast"
+
+
+
+interface CreatingContext {
+    user?: GetingData | undefined
+    setUser?: any
+}
+export const UserContext = createContext<CreatingContext>({})
 
 interface Iprop {
     children: ReactNode
 }
-
-interface CreatingContext {
-
-}
-
-export const UserContext = createContext({})
-
 const Context1 = (prop: Iprop) => {
 
-    const [user, setUser] = useState()
+    let userRealoadble;
+
+    try {
+        const user: GetingData = JSON.parse(`${localStorage.getItem("user")}`)
+
+
+        userRealoadble = user
+    } catch {
+        userRealoadble = undefined
+    }
+    const [user, setUser] = useState<GetingData | undefined>(userRealoadble)
 
 
 
@@ -30,7 +44,7 @@ const Context1 = (prop: Iprop) => {
 
             {prop.children}
             <Toaster
-            reverseOrder={false}
+                reverseOrder={false}
             />
         </UserContext.Provider>
 
