@@ -6,14 +6,25 @@ import { Todo } from "@/types/types";
 import { UserContext } from "@/wrappers/contexts";
 import { Skeleton } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { withAuth } from "./HOC/AuthHOC";
+
 
 const Home = () => {
   const { user } = useContext(UserContext)
 
+  const router = useRouter()
+
+
+  useEffect(() => {
+    if (!user) {
+
+      router.push("../auth/login")
+
+    }
+  }, [user])
 
 
   const fetchfunch = () => {
