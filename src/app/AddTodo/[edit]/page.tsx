@@ -24,13 +24,22 @@ const AddTodo = () => {
 
     const param = useParams()
 
+    interface IOldData {
+        title?: string,
+        description?: string,
+
+    }
+
+    const [Olddata, setOldData] = useState<IOldData>({})
+
     useEffect(() => {
-        inputref.current.value = `${params.get("title")}`
-        textArea.current.value = `${params.get("desc")}`
+        const Data: IOldData = {
+            description: params.get("desc") || "Dummy Data",
+            title: params.get("title") || "Dummy Data"
+        }
 
+        setOldData(Data)
 
-        console.log(params.get("title"))
-    
 
     }, [])
 
@@ -97,14 +106,16 @@ const AddTodo = () => {
                 <div className="rtl ">
                     <Input
                         ref={inputref}
-                        type="text" label="عنوان" />
+                        type="text" label="عنوان"
+                        value={Olddata.title}
+                    />
 
                     <Textarea
                         ref={textArea}
                         label="توضیحات"
                         placeholder="توضیحات مربوطه"
                         className="mt-3"
-
+                        value={Olddata.description}
                     />
 
                     {!loading ?
