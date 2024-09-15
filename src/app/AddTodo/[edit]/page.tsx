@@ -28,6 +28,8 @@ const AddTodo = () => {
         inputref.current.value = `${params.get("title")}`
         textArea.current.value = `${params.get("desc")}`
 
+
+        console.log(params.get("title"))
     
 
     }, [])
