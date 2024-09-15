@@ -21,8 +21,8 @@ const AddTodo = () => {
     const [loading, setLoading] = useState(true)
 
     const handleClick = () => {
-        const INP = inputref.current.value
-        const TXT = textArea.current.value
+        const INP = String(inputref.current.value)
+        const TXT = String(textArea.current.value)
 
 
 
@@ -53,7 +53,13 @@ const AddTodo = () => {
                     setLoading(false)
                 })
         }
-        Upload()
+
+        if (TXT.length > 0 && INP.length > 0) {
+
+            Upload()
+        } else {
+            toast.error("اطلاعاتی وارد نشده است")
+        }
 
     }
 
