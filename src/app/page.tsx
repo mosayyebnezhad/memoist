@@ -4,7 +4,7 @@ import api from "@/api/api";
 import CardPage from "@/component/CardPage";
 import { Todo } from "@/types/types";
 import { UserContext } from "@/wrappers/contexts";
-import { Pagination, Skeleton } from "@nextui-org/react";
+import { Pagination, Skeleton, Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { redirect, useRouter } from "next/navigation";
 
@@ -18,9 +18,11 @@ const Home = () => {
   const [feth, canifetch] = useState(false)
   const [haveUser, isHaveuser] = useState(false)
   const router = useRouter()
-  const [itemfetching, changeItemfetchingTo] = useState<number>(1)
+  const [currontPage, setcurront] = useState<number>(1)
   const [total, setTotal] = useState<number>(0)
 
+
+  const [page, setPage] = useState<number>(1)
   useEffect(() => {
     if (user) {
       if (!(user.token)) {
@@ -88,22 +90,22 @@ const Home = () => {
 
 
 
-  const fetchfunch = () => {
+  const fetchfunch = (e: number) => {
     const response = api.get("todo", {
       headers: {
         Authorization: `Bearer ${user?.token}`
       },
       params: {
-        page: itemfetching,
+        page: e,
         pageSize: 2
       }
     })
-    console.log("fetching is work")
+
     return response
   }
-  const { data, isLoading, error, isPending, refetch, isFetched } = useQuery({
-    queryKey: ['todolist'],
-    queryFn: fetchfunch,
+  const { data, isLoading, error, isFetching, refetch, isFetched } = useQuery({
+    queryKey: ['todolist', page],
+    queryFn: () => fetchfunch(page),
     enabled: feth
   })
 
@@ -111,9 +113,19 @@ const Home = () => {
 
 
   useEffect(() => {
-    setTotal(data?.data.pagination.totalPage)
-    console.log(data?.data.pagination)
-  }, [isFetched])
+    let total = data?.data.pagination.totalPage;
+    let current = data?.data.pagination.currentPage;
+
+
+    setTotal(total)
+    setcurront(current)
+
+
+  }, [isFetching])
+
+
+
+
   const OutD: Todo[] = data?.data.data
 
 
@@ -121,7 +133,7 @@ const Home = () => {
     <div className="container justify-center mx-auto flex flex-wrap gap-5 h-auto">
 
 
-      {isPending &&
+      {isFetching &&
 
         <>
           <div className="w-80 h-80 bg-gray-500 animate-pulse rounded-lg">
@@ -134,7 +146,7 @@ const Home = () => {
       }
 
 
-      {OutD &&
+      {(OutD && !isFetching) &&
 
 
         <>
@@ -172,9 +184,25 @@ const Home = () => {
 
 
       <div className="w-full mt-8 mb-24 flex justify-center">
-        <Pagination total={total} initialPage={3} onChange={(e) => {
-          changeItemfetchingTo(e)
-        }} />
+
+        {total ?
+          <Pagination total={total} initialPage={currontPage} onChange={(e) => {
+            setPage(e)
+          }} />
+          :
+          <>
+            {isFetched
+              ?
+              <>
+              </>
+              :
+              <Spinner />
+            }
+          </>
+        }
+
+
+
       </div>
 
     </div>

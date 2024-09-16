@@ -51,7 +51,7 @@ const Navbar = () => {
 
 
                                 <Link href={"/profile"}>
-                                    {data.user.firstName}
+                                    {data.user.firstName}  {data.user.lastName}
                                 </Link>
 
                                 :
@@ -79,7 +79,7 @@ const Navbar = () => {
                         {
                             data &&
                             <Button variant="shadow" color="primary">
-                                <Link className="flex w-full gap-2" href={"../../../../AddTodo"}>
+                                <Link className="flex w-full h-full items-center gap-2" href={"../../../../AddTodo"}>
                                     افزودن
                                     <PlusCircle />
                                 </Link>
@@ -89,19 +89,19 @@ const Navbar = () => {
 
                         }
 
-
+                    
 
                         <Button color="default">
                             {data ?
 
 
 
-                                <Link href={"/profile"}>
-                                    {data.user.firstName}
+                                <Link className="flex w-full h-full items-center" href={"/profile"}>
+                                    {data.user.firstName} {data.user.lastName}
                                 </Link>
 
                                 :
-                                <Link href={"/auth/login"}>
+                                <Link className="flex w-full h-full items-center" href={"/auth/login"}>
                                     ورود
                                 </Link>
                             }

@@ -64,7 +64,7 @@ const CardPage = (prop: IProp) => {
                     <DeleteNode id={id} refech={prop.refech} />
 
                     <Button variant="bordered" color="warning" className="mr-2">
-                        <Link href={`../../../../AddTodo/${id}?title=${title}&desc=${description}`}
+                        <Link className="w-full h-full flex justify-center items-center" href={`../../../../AddTodo/${id}?title=${title}&desc=${description}`}
 
 
 

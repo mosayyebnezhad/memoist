@@ -3,7 +3,8 @@
 import api from "@/api/api";
 import { UserContext } from "@/wrappers/contexts";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
-import { useParams, useSearchParams } from "next/navigation";
+import { redirect, RedirectType, useParams, useRouter, useSearchParams } from "next/navigation";
+
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -24,6 +25,9 @@ const AddTodo = () => {
 
     const param = useParams()
 
+
+
+    const router = useRouter()
     interface IOldData {
         title?: string,
         description?: string,
@@ -38,7 +42,7 @@ const AddTodo = () => {
             title: params.get("title") || "Dummy Data"
         }
 
-        textArea.current.value = Data.description
+
 
         setOldData(Data)
 
@@ -53,7 +57,7 @@ const AddTodo = () => {
 
         const Upload = async () => {
             setLoading(true)
-
+            let x = false
             const Data: IDataForPost = {
                 title: INP,
                 description: TXT
@@ -68,6 +72,8 @@ const AddTodo = () => {
                     toast.success("عملیات با موفقیت انجام شد")
                     // inputref.current.value = ""
                     // textArea.current.value = ""
+                    x = true
+
                 })
                 .catch(s => {
 
@@ -76,6 +82,9 @@ const AddTodo = () => {
 
                 .finally(() => {
                     setLoading(false)
+                    if (x) {
+                        router.push("../../../../")
+                    }
                 })
         }
 
@@ -106,21 +115,35 @@ const AddTodo = () => {
 
             <div className="container mx-auto">
                 <div className="rtl ">
-                    <Input
-                        ref={inputref}
-                        type="text" label="عنوان"
-                        value={Olddata.title}
-                    />
 
-                    <Textarea
-                        ref={textArea}
-                        label="توضیحات"
-                        placeholder="توضیحات مربوطه"
-                        className="mt-3"
-                        
-                        // defaultValue={`${Olddata.description ? Olddata.description : "no"}`}
-                    />
+                    {Olddata.title
+                        &&
 
+                        <Input
+                            ref={inputref}
+                            type="text" label="عنوان"
+                            // value={}
+                            // value={Olddata.title}
+                            defaultValue={Olddata.title}
+
+                        />
+
+                    }
+                    {Olddata.description
+                        ?
+                        <Textarea
+                            ref={textArea}
+                            label="توضیحات"
+                            placeholder="توضیحات مربوطه"
+                            className="mt-3"
+                            defaultValue={Olddata.description}
+                        />
+
+                        :
+                        <div className="w-full animate-pulse h-36 bg-gray-600 rounded-lg">
+
+                        </div>
+                    }
                     {!loading ?
 
                         <Button onClick={handleClick} className="mt-6" variant="shadow" color="secondary">

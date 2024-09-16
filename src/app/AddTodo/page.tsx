@@ -3,6 +3,7 @@
 import api from "@/api/api";
 import { UserContext } from "@/wrappers/contexts";
 import { Button, Input, Spinner, Textarea } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -17,7 +18,7 @@ const AddTodo = () => {
     const inputref = useRef<any>("");
     const textArea = useRef<any>("");
     const { user } = useContext(UserContext)
-
+    const router = useRouter()
     const [loading, setLoading] = useState(true)
 
     const handleClick = () => {
@@ -28,7 +29,7 @@ const AddTodo = () => {
 
         const Upload = async () => {
             setLoading(true)
-
+            let x = false
             const Data: IDataForPost = {
                 title: INP,
                 description: TXT
@@ -43,6 +44,7 @@ const AddTodo = () => {
                     toast.success("عملیات با موفقیت انجام شد")
                     // inputref.current.value = ""
                     // textArea.current.value = ""
+                    x = true
                 })
                 .catch(s => {
 
@@ -51,6 +53,9 @@ const AddTodo = () => {
 
                 .finally(() => {
                     setLoading(false)
+                    if (x) {
+                        router.push("../../../../")
+                    }
                 })
         }
 

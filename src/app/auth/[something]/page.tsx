@@ -75,7 +75,13 @@ const LoginPage = () => {
     const firstname = useRef<any>(null)
     const lastname = useRef<any>(null)
 
+    const keydown = (e: any) => {
 
+
+        if(e.key == "Enter"){
+            handleclick()
+        }
+    }
 
     const handleclick = () => {
         let Email = "";
@@ -250,7 +256,7 @@ const LoginPage = () => {
 
                         {thisPage == "login" ? "ورود به سامانه" : "ثبت نام در سامانه"}
                     </h1>
-                    <form className="rtl w-80 mx-auto flex justify-center flex-wrap gap-y-5 my-5" >
+                    <form className="rtl w-80 mx-auto flex justify-center flex-wrap gap-y-5 my-5" onKeyDown={keydown}>
                         <Input ref={email} type="email" label="ایمیل" />
 
 
@@ -266,7 +272,9 @@ const LoginPage = () => {
                         <Button disabled={Loading} onClick={handleclick} className="w-10/12"
                             variant={Loading ? "solid" : "bordered"}>
                             {!Loading ?
-                                "ورود"
+                                <>
+                                    {thisPage == "login" ? "ورود" : "ثبت نام"}
+                                </>
                                 :
                                 <Refresh className="animate-spin" />
                             }
