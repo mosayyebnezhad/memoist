@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning lang="en">
-      <body className={vazir.className + " overflow-hidden"}>
+      <body className={vazir.className}>
 
         <ReactQuery>
           <NextUIProvider>

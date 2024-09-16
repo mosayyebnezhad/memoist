@@ -38,6 +38,8 @@ const AddTodo = () => {
             title: params.get("title") || "Dummy Data"
         }
 
+        textArea.current.value = Data.description
+
         setOldData(Data)
 
 
@@ -115,7 +117,8 @@ const AddTodo = () => {
                         label="توضیحات"
                         placeholder="توضیحات مربوطه"
                         className="mt-3"
-                        value={Olddata.description}
+                        
+                        // defaultValue={`${Olddata.description ? Olddata.description : "no"}`}
                     />
 
                     {!loading ?

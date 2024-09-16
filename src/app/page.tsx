@@ -4,27 +4,88 @@ import api from "@/api/api";
 import CardPage from "@/component/CardPage";
 import { Todo } from "@/types/types";
 import { UserContext } from "@/wrappers/contexts";
-import { Skeleton } from "@nextui-org/react";
+import { Pagination, Skeleton } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { redirect, useRouter } from "next/navigation";
 
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { withAuth } from "./HOC/AuthHOC";
+import toast from "react-hot-toast";
 
 
 const Home = () => {
-  const { user } = useContext(UserContext)
-
+  const { user, setUser } = useContext(UserContext)
+  const [feth, canifetch] = useState(false)
+  const [haveUser, isHaveuser] = useState(false)
   const router = useRouter()
-
+  const [itemfetching, changeItemfetchingTo] = useState<number>(1)
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
-    if (!user) {
+    if (user) {
+      if (!(user.token)) {
+        toast.error("کاربر احراز هویت نشده است")
+        router.push("../auth/login")
 
+      } else {
+        isHaveuser(true)
+      }
+    } else {
+      toast.error("کاربر احراز هویت نشده است")
       router.push("../auth/login")
-
     }
+
   }, [user])
+
+
+  let token: string;
+
+
+  if (haveUser && user) {
+
+    token = user.token
+
+  }
+
+
+
+  const checking = () => {
+    const response = api.get("auth/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        page: 1,
+        pageSize: 10
+      }
+    })
+    console.log("chcking is work")
+    return response
+  }
+  const preAuth = useQuery({
+    queryKey: ['check'],
+    queryFn: checking,
+    enabled: haveUser
+  })
+
+  const Err: any = preAuth.error
+
+  useEffect(() => {
+    console.log()
+
+    if (Err?.response.data.message) {
+      toast.error(Err?.response.data.message)
+      localStorage.removeItem("user")
+      setUser(undefined)
+      router.push("../../../../auth/login")
+    }
+
+
+    if (preAuth.data) {
+      canifetch(true)
+    }
+  }, [preAuth.isFetched])
+
 
 
   const fetchfunch = () => {
@@ -33,29 +94,31 @@ const Home = () => {
         Authorization: `Bearer ${user?.token}`
       },
       params: {
-        page: 1,
-        pageSize: 10
+        page: itemfetching,
+        pageSize: 2
       }
     })
-
+    console.log("fetching is work")
     return response
   }
-
-
-
-  const { data, isLoading, error, isPending, refetch } = useQuery({
+  const { data, isLoading, error, isPending, refetch, isFetched } = useQuery({
     queryKey: ['todolist'],
-    queryFn: fetchfunch
+    queryFn: fetchfunch,
+    enabled: feth
   })
 
 
-  // console.log(isLoading)
-  // console.log(isPending)
 
+
+  useEffect(() => {
+    setTotal(data?.data.pagination.totalPage)
+    console.log(data?.data.pagination)
+  }, [isFetched])
   const OutD: Todo[] = data?.data.data
 
+
   return (
-    <div className="container justify-center mx-auto flex flex-wrap gap-5">
+    <div className="container justify-center mx-auto flex flex-wrap gap-5 h-auto">
 
 
       {isPending &&
@@ -108,7 +171,11 @@ const Home = () => {
       }
 
 
-
+      <div className="w-full mt-8 mb-24 flex justify-center">
+        <Pagination total={total} initialPage={3} onChange={(e) => {
+          changeItemfetchingTo(e)
+        }} />
+      </div>
 
     </div>
   );
