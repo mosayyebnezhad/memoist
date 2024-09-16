@@ -83,7 +83,7 @@ const AddTodo = () => {
         <>
 
             <div className="container mx-auto">
-                <div className="rtl ">
+                <div className="rtl w-9/12 mx-auto md:w-6/12">
                     <Input
                         ref={inputref}
                         type="text" label="عنوان" />

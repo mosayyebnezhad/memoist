@@ -97,7 +97,7 @@ const Home = () => {
       },
       params: {
         page: e,
-        pageSize: 2
+        pageSize: 9
       }
     })
 
@@ -159,7 +159,7 @@ const Home = () => {
 
 
 
-                    <CardPage id={item.id} title={item.title} description={item.description} refech={
+                    <CardPage status={item.status} id={item.id} title={item.title} description={item.description} refech={
                       () => {
                         refetch()
                       }

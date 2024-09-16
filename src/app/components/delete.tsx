@@ -46,7 +46,7 @@ export const DeleteNode = (prop: Iprop) => {
     return (
         <Fragment>
 
-            <Button  onPress={onOpen} variant="bordered" color="danger">
+            <Button size="sm"  onPress={onOpen} variant="bordered" color="danger">
 
                 <Bin />
 

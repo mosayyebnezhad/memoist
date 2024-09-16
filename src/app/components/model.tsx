@@ -46,7 +46,7 @@ export default function ModalAccept(prop: IProp) {
             return null
         }
         const token = JSON.parse(lCS).token
-        console.log(token)
+        // console.log(token)
 
         const run = async () => {
             setLoading(true)
@@ -61,12 +61,12 @@ export default function ModalAccept(prop: IProp) {
                 .then(s => {
                     localStorage.removeItem("user")
                     setUser(undefined)
-                    console.log(s)
+                    // console.log(s)
                     setRedirect("")
                     router.push("../../../../auth/login")
 
                 }).catch(s => {
-                    console.log(s)
+                    // console.log(s)
                     toast.error("خطا")
 
                 }).finally(() => {
