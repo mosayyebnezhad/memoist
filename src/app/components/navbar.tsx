@@ -21,13 +21,34 @@ const Navbar = () => {
     const { theme } = useTheme()
 
     const [data, setData] = useState<GetingData | undefined>(undefined)
-
+    const [isloginpage, setisloginpage] = useState<boolean>(false)
+    const param = useParams()
 
     useEffect(() => {
 
         setData(user)
 
+        if (param?.something) {
+            setisloginpage(true)
+        }
+
     }, [user])
+
+
+    useEffect(() => {
+
+        if (param.something) {
+            setisloginpage(true)
+
+
+        }
+        else {
+            setisloginpage(false)
+        }
+
+    }, [param])
+
+
 
 
     const [menu, setmenu] = useState<"-100" | "100">("100")
@@ -38,9 +59,20 @@ const Navbar = () => {
         <>
             <div className="container mx-auto mt-6 relative overflow-hidden">
                 <nav className="flex justify-between items-center w-11/12 mx-auto ">
-                    <Link href={"../../../../../"}>
-                        <Logo />
-                    </Link>
+
+                    {
+                        !isloginpage
+                            ?
+                            <Link href={"../../../../../"}>
+                                <Logo />
+                            </Link>
+                            :
+
+
+                            <Logo />
+
+                    }
+
 
 
 
@@ -89,7 +121,7 @@ const Navbar = () => {
 
                         }
 
-                    
+
 
                         <Button color="default">
                             {data ?
@@ -126,7 +158,7 @@ const Navbar = () => {
                     </div>
                 </nav>
             </div>
-            <div className={`flex items-center justify-center gap-4 absolute flex-col ${theme == "light" ? "bg-slate-400" : "bg-gray-800"} h-dvh top-0 w-full transition-all right-0
+            <div className={`flex fixed md:hidden items-center justify-center gap-4  flex-col ${theme == "light" ? "bg-slate-400" : "bg-gray-800"} h-dvh top-0 w-full transition-all right-0
                         ${menu === "100" ? "translate-x-full" : "translate-x-0"}
                         z-50`}>
                 <Xmark className="cursor-pointer md:hidden visible" onClick={() => {

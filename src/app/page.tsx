@@ -61,7 +61,7 @@ const Home = () => {
         pageSize: 10
       }
     })
-    console.log("chcking is work")
+    // console.log("chcking is work")
     return response
   }
   const preAuth = useQuery({
@@ -73,7 +73,7 @@ const Home = () => {
   const Err: any = preAuth.error
 
   useEffect(() => {
-    console.log()
+  
 
     if (Err?.response.data.message) {
       toast.error(Err?.response.data.message)
