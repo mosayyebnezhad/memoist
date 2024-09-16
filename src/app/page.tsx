@@ -97,7 +97,7 @@ const Home = () => {
       },
       params: {
         page: e,
-        pageSize: 9
+        pageSize: 8
       }
     })
 

@@ -1,14 +1,16 @@
 "use client"
 import api from "@/api/api"
+import { GetingData } from "@/types/types"
 import { UserContext } from "@/wrappers/contexts"
-import { Button, Input, Spinner } from "@nextui-org/react"
+import { Button, Card, Input, Spinner } from "@nextui-org/react"
+import { InfoCircleSolid } from "iconoir-react"
 import { redirect } from "next/navigation"
 import { useContext, useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 
 const Profile = () => {
 
-    const { user } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
 
 
     useEffect(() => {
@@ -31,80 +33,98 @@ const Profile = () => {
     const pass = useRef<any>()
 
 
-    interface LOADINGDATA {
-        name: boolean,
-        family: boolean,
-        pass: boolean
-    }
 
-    const [loadingBTN, setloadingBTN] = useState<LOADINGDATA>({
-        family: false,
-        name: false,
-        pass: false
-    })
+    const [loadingBTN, setloadingBTN] = useState<boolean>(false)
 
 
     type Itemtype = "name" | "family" | "pass"
 
 
     const handleClick = (item: Itemtype) => {
-        toast.error("این بخش در حال تکمیل است")
 
-        let DataCripe = {
-            firstName: name.current.value,
-            lastName: family.current.value,
-            password: pass.current.value,
 
+        let DataCripe: any = {}
+        let loadingData = {
+            family: false,
+            name: false,
+            pass: false
         }
-
 
 
 
 
         if (item == "name") {
+            DataCripe.firstName = name.current.value
 
-            setloadingBTN({
-                family: false,
-                name: true,
-                pass: false
-            })
+            loadingData.name = true
         }
         if (item == "family") {
+            DataCripe.lastName = family.current.value
+            loadingData.family = true
 
-            setloadingBTN({
-                family: true,
-                name: false,
-                pass: false
-            })
         }
         if (item == "pass") {
+            DataCripe.password = pass.current.value
+            loadingData.pass = true
 
 
-
-            setloadingBTN({
-                family: false,
-                name: false,
-                pass: true
-            })
         }
 
-
+        setloadingBTN(true)
         console.log(DataCripe)
 
-        // api.put("user", DataCripe, {
-        //     headers: {
-        //         Authorization: `Bearer ${user?.token}`
-        //     }
-        // })
-        //     .then(s => console.log(s))
-        //     .catch(s => console.log(s))
-        //     .finally(() => {
-        //         setloadingBTN({
-        //             family: false,
-        //             name: false,
-        //             pass: false
-        //         })
-        //     })
+        api.put("user", DataCripe, {
+            headers: {
+                Authorization: `Bearer ${user?.token}`
+            }
+        })
+            .then(s => {
+                //notif
+                toast.success(s.data.message)
+                let token;
+                if (user) {
+                    token = user.token
+
+
+                    //getFullData
+
+                    const FullData = {
+                        token: token,
+                        firstName: s.data.data.firstName,
+                        lastName: s.data.data.lastName,
+                        email: s.data.data.email,
+                        id: s.data.data.id
+                    }
+
+                    console.log(FullData)
+                    console.log(s)
+                    //state
+
+                    const stateData: GetingData = {
+                        token: FullData.token,
+                        user: {
+                            email: FullData.email,
+                            firstName: FullData.firstName,
+                            lastName: FullData.lastName,
+                            id: FullData.id
+                        }
+                    }
+
+                    setUser(stateData)
+
+                    //localstorage
+
+
+                    localStorage.setItem("user", JSON.stringify(stateData))
+
+                } else {
+                    toast.error("کاربر یافت نشد")
+                }
+            })
+            .catch(s => console.log(s))
+            .finally(() => {
+                setloadingBTN(false)
+            })
 
 
 
@@ -125,15 +145,22 @@ const Profile = () => {
 
 
                 <h1 className="font-bold text-3xl ">پروفایل کاربری</h1>
+                <Card className="my-6 opacity-70">
+                    <p className="text-sm text-red-600 w-11/12 mx-auto  mb-5 mt-5 flex gap-2">
+                        <InfoCircleSolid color="red" />
+                        این اپ برای تست است، بنابراین امنیت در آن به طور کامل مد نظر قرار نگرفته است.
+
+                    </p>
+                </Card>
 
                 {user ?
                     <>
                         <Input type="text" size="lg" ref={name} defaultValue={user?.user.firstName} className="mt-6 mb-6" />
 
 
-                        {loadingBTN.name ?
+                        {loadingBTN ?
                             <Button>
-                                <Spinner />
+                                <Spinner size="sm" />
                             </Button>
                             :
                             <Button variant="solid" color="primary"
@@ -146,15 +173,36 @@ const Profile = () => {
 
 
                         <Input ref={family} type="text" size="lg" defaultValue={user?.user.lastName} className="mt-6 mb-6" />
-                        <Button variant="solid" color="primary"
-                            onClick={() => handleClick("family")}>
-                            تغییر نام خانوادگی
-                        </Button>
-                        <Input ref={pass} type="text" size="lg"  className="mt-6 mb-6" />
-                        <Button variant="solid" color="primary"
-                            onClick={() => handleClick("pass")}>
-                            رمز عبور
-                        </Button>
+
+
+
+
+                        {loadingBTN ?
+                            <Button>
+                                <Spinner size="sm" />
+                            </Button>
+                            :
+                            <Button variant="solid" color="primary"
+                                onClick={() => handleClick("family")}>
+                                تغییر نام خانوادگی
+                            </Button>
+                        }
+
+
+
+                        <Input ref={pass} type="text" size="lg" className="mt-6 mb-6" />
+                        {loadingBTN ?
+                            <Button>
+                                <Spinner size="sm" />
+                            </Button>
+                            :
+                            <Button variant="solid" color="primary"
+                                onClick={() => handleClick("pass")}>
+                                رمز عبور
+                            </Button>
+                        }
+
+
                     </>
                     :
                     <>
