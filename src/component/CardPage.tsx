@@ -1,6 +1,7 @@
 
 import api from "@/api/api";
 import { DeleteNode } from "@/app/components/delete";
+import TodoBtn from "@/app/components/TodoButton";
 import { UserContext } from "@/wrappers/contexts";
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Image, ScrollShadow } from "@nextui-org/react";
 import { Bin, CheckCircle, CheckCircleSolid, EditPencil, Eye } from "iconoir-react";
@@ -36,36 +37,7 @@ const CardPage = (prop: IProp) => {
     }
 
 
-    const [loadingStatus, setLoadingStatus] = useState<boolean>(false)
-
-    const HandelSendDoitStatus = (e: boolean, id: number) => {
-        setLoadingStatus(true)
-        // console.log(e + " " + id)
-
-
-        const SendData = {
-            status: e
-        }
-        api.put(`todo/${id}`, SendData, {
-            headers: {
-                Authorization: `Bearer ${user?.token}`
-            }
-        })
-            .then(s => {
-                toast.success(s.data.message)
-
-            })
-            .catch(s => {
-                toast.error(s.response.data.message)
-            })
-            .finally(() => {
-                setLoadingStatus(false)
-                prop.refech()
-            })
-
-
-
-    }
+  
 
 
 
@@ -91,30 +63,8 @@ const CardPage = (prop: IProp) => {
                 <Divider className="mt-2" />
                 <div className="mt-2 h-12 flex justify-center items-center">
 
-
-                    {/* <Link href={"../../../../AddTodo/delete/" + id}>
-                            <Bin />
-                        </Link> */}
-
-
-
-
                     <DeleteNode id={id} refech={prop.refech} />
-                    <Button size="md" variant={Data.status ? "solid" : "bordered"} color={Data.status ? "secondary" : "default"} className="mr-2 flex justify-center items-center">
-                        {Data.status ?
-                            <div className="font-thin text-sm flex items-center gap-2"
-                                onClick={() => HandelSendDoitStatus(false, id)} >
-                                <CheckCircle />
-                                <p>انجام شده</p>
-                            </div>
-                            :
-                            <div className="font-thin text-sm flex items-center gap-2"
-                                onClick={() => HandelSendDoitStatus(true, id)} >
-                                <CheckCircleSolid />
-                                <p>انجام نشده</p>
-                            </div>
-                        }
-                    </Button>
+                    <TodoBtn Providestatus={Data.status} id={Data.id} />
 
                     <Button size="sm" variant="bordered" color="warning" className="mr-2">
                         <Link className="w-full h-full flex justify-center items-center" href={`../../../../AddTodo/${id}?title=${title}&desc=${description}`}                        >

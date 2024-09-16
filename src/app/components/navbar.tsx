@@ -82,12 +82,13 @@ const Navbar = () => {
 
 
 
-                                <Link href={"/profile"}>
+                                <>
                                     {data.user.firstName}  {data.user.lastName}
-                                </Link>
+                                </>
+
 
                                 :
-                                <Link href={"/auth/login"}>
+                                <Link href={"/auth/login"} className="w-full h-full flex items-center justify-center">
                                     ورود
                                 </Link>
                             }
@@ -104,13 +105,13 @@ const Navbar = () => {
 
 
 
-                    <div className=" items-center justify-center gap-4  hidden md:flex ">
+                    <div className=" items-center justify-center gap-4  hidden md:flex h-20 ">
 
 
 
                         {
                             data &&
-                            <Button variant="shadow" color="primary">
+                            <Button variant="shadow" color="primary" className="z-40">
                                 <Link className="flex w-full h-full items-center gap-2" href={"../../../../AddTodo"}>
                                     افزودن
                                     <PlusCircle />
@@ -128,12 +129,12 @@ const Navbar = () => {
 
 
 
-                                <Link className="flex w-full h-full items-center" href={"/profile"}>
+                                <Link className="flex w-full h-full items-center justify-center" href={"/profile"}>
                                     {data.user.firstName} {data.user.lastName}
                                 </Link>
 
                                 :
-                                <Link className="flex w-full h-full items-center" href={"/auth/login"}>
+                                <Link className="flex w-full h-full items-center justify-center" href={"/auth/login"}>
                                     ورود
                                 </Link>
                             }
