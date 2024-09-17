@@ -82,9 +82,9 @@ const Navbar = () => {
 
 
 
-                                <>
-                                    {data.user.firstName}  {data.user.lastName}
-                                </>
+                                <Link className="flex w-full h-full items-center justify-center" href={"/profile"}>
+                                    {data.user.firstName} {data.user.lastName}
+                                </Link>
 
 
                                 :
@@ -210,14 +210,3 @@ const Navbar = () => {
 }
 
 export default Navbar;
-
-
-
-
-const LoadingBTN = () => {
-    return (
-        <Button variant="faded" color="default">
-            <Spinner size="sm" color="current" />
-        </Button>
-    )
-}
